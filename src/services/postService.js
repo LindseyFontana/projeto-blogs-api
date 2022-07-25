@@ -5,6 +5,7 @@ const { Category } = require('../database/models');
 const { BlogPost } = require('../database/models');
 const { PostCategory } = require('../database/models');
 const { User } = require('../database/models');
+const err = require('../constants/errorMessage');
 
 const postService = {
   validate: async (body) => {
@@ -15,7 +16,7 @@ const postService = {
     });
     const { error } = schema.validate(body);
 
-    if (error) throw new ApplicationError('Some required fields are missing', 400);
+    if (error) throw new ApplicationError(err.missingField, 400);
   },
 
   verifyIfExists: async (body) => {
@@ -24,7 +25,7 @@ const postService = {
       });
 
     if (category.length !== body.categoryIds.length) {
-      throw new ApplicationError('"categoryIds" not found', 400);
+      throw new ApplicationError(err.categoryNotFound, 400);
     }
   },
   
@@ -57,7 +58,6 @@ const postService = {
         { model: Category, through: { attributes: [] } },
       ],
     });
-    console.log('****', posts);
     return posts;
   },
 };

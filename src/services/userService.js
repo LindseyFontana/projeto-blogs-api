@@ -1,6 +1,7 @@
 const Joi = require('joi');
 const ApplicationError = require('../error/error');
 const { User } = require('../database/models');
+const err = require('../constants/errorMessage');
 
 const userService = {
   validate: async (newUser) => {
@@ -17,7 +18,7 @@ const userService = {
 
   verifyIfExists: async (email) => {
     const user = await User.findOne({ where: { email } });
-    if (user) throw new ApplicationError('User already registered', 409);
+    if (user) throw new ApplicationError(err.userInvalid, 409);
     return user;
   },
 
@@ -33,7 +34,7 @@ const userService = {
 
   getById: async (id) => {
     const user = await User.findByPk(id, { attributes: { exclude: 'password' } });
-    if (!user) throw new ApplicationError('User does not exist', 404);
+    if (!user) throw new ApplicationError(err.userNotExists, 404);
     return user;
   },
 };
