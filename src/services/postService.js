@@ -1,11 +1,11 @@
 const Joi = require('joi');
-const jwt = require('jsonwebtoken');
 const ApplicationError = require('../error/error');
 const { Category } = require('../database/models');
 const { BlogPost } = require('../database/models');
 const { PostCategory } = require('../database/models');
 const { User } = require('../database/models');
 const err = require('../constants/errorMessage');
+const tokenManager = require('../security/tokenManager');
 
 const postService = {
   validate: async (body) => {
@@ -46,7 +46,7 @@ const postService = {
   },
 
   getUserIdByToken: async (token) => {
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const decoded = tokenManager.validate(token);
     const user = await User.findOne({ where: { email: decoded.email } });
     return user.dataValues.id;
   },
