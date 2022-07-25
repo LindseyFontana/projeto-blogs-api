@@ -7,4 +7,5 @@ module.exports = {
   categoryNotFound: '"categoryIds" not found',
   userNotExists: 'User does not exist',
   userInvalid: 'User already registered',
+  postNotFound: 'Post does not exist',
 };

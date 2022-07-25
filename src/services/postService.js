@@ -5,6 +5,17 @@ const { BlogPost } = require('../database/models');
 const { User: UserModel } = require('../database/models');
 const err = require('../constants/errorMessage');
 
+const formatPost = ({ id, title, content, userId, published, updated, User, Categories }) => ({
+  id, 
+  title,
+  content, 
+  userId, 
+  published, 
+  updated, 
+  user: User.dataValues, 
+  categories: Categories,
+});
+
 const postService = {
   validate: async (body) => {
      const schema = Joi.object({
@@ -43,17 +54,19 @@ const postService = {
       ],
     });
     const newPosts = posts.map(({ dataValues }) => dataValues)
-      .map(({ id, title, content, userId, published, updated, User, Categories }) => ({
-          id, 
-          title,
-          content, 
-          userId, 
-          published, 
-          updated, 
-          user: User.dataValues, 
-          categories: Categories,
-        }));
+      .map((post) => formatPost(post));
     return newPosts;
+  },
+
+  getById: async (postId) => {
+    const post = await BlogPost.findByPk(postId, { include: [
+        { model: UserModel, attributes: { exclude: ['password'] } },
+        { model: Category, through: { attributes: [] } },
+      ] });
+    
+    if (!post) throw new ApplicationError(err.postNotFound, 404);
+
+    return formatPost(post);
   },
 };
 
