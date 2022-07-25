@@ -1,6 +1,5 @@
-require('dotenv/config');
-const jwt = require('jsonwebtoken');
 const userService = require('../services/userService');
+const tokenManager = require('../security/tokenManager');
 
 const usersController = {
   create: async (request, response) => {
@@ -10,7 +9,7 @@ const usersController = {
     await userService.verifyIfExists(newUser.email);
     await userService.create(newUser);
   
-    const token = jwt.sign(request.body, process.env.JWT_SECRET);
+    const token = tokenManager.create(newUser);
     response.status(201).json({ token });
   },
 
