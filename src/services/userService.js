@@ -2,6 +2,7 @@ const Joi = require('joi');
 const ApplicationError = require('../error/error');
 const { User } = require('../database/models');
 const err = require('../constants/errorMessage');
+const tokenManager = require('../security/tokenManager');
 
 const userService = {
   validate: async (newUser) => {
@@ -36,6 +37,13 @@ const userService = {
     const user = await User.findByPk(id, { attributes: { exclude: 'password' } });
     if (!user) throw new ApplicationError(err.userNotExists, 404);
     return user;
+  },
+
+  getUserIdByToken: async (token) => {
+    const decoded = tokenManager.validate(token);
+    console.log(decoded);
+      const user = await User.findOne({ where: { email: decoded.email } });
+      return user.dataValues.id;
   },
 };
 

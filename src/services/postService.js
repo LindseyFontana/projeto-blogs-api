@@ -2,10 +2,8 @@ const Joi = require('joi');
 const ApplicationError = require('../error/error');
 const { Category } = require('../database/models');
 const { BlogPost } = require('../database/models');
-const { PostCategory } = require('../database/models');
 const { User } = require('../database/models');
 const err = require('../constants/errorMessage');
-const tokenManager = require('../security/tokenManager');
 
 const postService = {
   validate: async (body) => {
@@ -28,28 +26,13 @@ const postService = {
       throw new ApplicationError(err.categoryNotFound, 400);
     }
   },
-  
-  createPostCategories: async (post, { title, categoryIds }) => {
-    const postCategories = await Promise.all(categoryIds
-        .map(async (id) => ({ postId: post.id, categoryId: id })));
-    await PostCategory.bulkCreate(postCategories);
-    const newPost = await BlogPost.findOne({ where: { title } });
-    return newPost.dataValues;
-  },
 
-  createPost: async (userId, { title, content }) => {
+  create: async (userId, { title, content }) => {
     await BlogPost.create({ 
       title, content, userId, published: new Date(), updated: new Date(),
     });
     const post = await BlogPost.findOne({ where: { title, userId } });
     return post.dataValues;
-  },
-
-  getUserIdByToken: async (token) => {
-  const decoded = tokenManager.validate(token);
-  console.log(decoded);
-    const user = await User.findOne({ where: { email: decoded.email } });
-    return user.dataValues.id;
   },
 
   getAll: async () => {

@@ -1,4 +1,6 @@
 const postService = require('../services/postService');
+const userService = require('../services/userService');
+const postCategoryService = require('../services/postCategoryService');
 
 const postController = {
   create: async (request, response) => {
@@ -6,9 +8,9 @@ const postController = {
     const newPost = request.body;
     await postService.validate(newPost);
     await postService.verifyIfExists(newPost);
-    const userId = await postService.getUserIdByToken(token);
-    const postCreated = await postService.createPost(userId, newPost);
-    await postService.createPostCategories(postCreated, newPost);
+    const userId = await userService.getUserIdByToken(token);
+    const postCreated = await postService.create(userId, newPost);
+    await postCategoryService.create(postCreated, newPost);
     response.status(201).json(postCreated);
   },
 
