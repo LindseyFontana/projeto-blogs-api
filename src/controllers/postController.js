@@ -3,12 +3,13 @@ const postService = require('../services/postService');
 const postController = {
   create: async (request, response) => {
     const token = request.headers.authorization;
-    await postService.validate(request.body);
-    await postService.verifyIfExists(request.body);
+    const newPost = request.body;
+    await postService.validate(newPost);
+    await postService.verifyIfExists(newPost);
     const userId = await postService.getUserIdByToken(token);
-    const post = await postService.createPost(userId, request.body);
-    await postService.createPostCategories(post, request.body);
-    response.status(201).json(post);
+    const postCreated = await postService.createPost(userId, newPost);
+    await postService.createPostCategories(postCreated, newPost);
+    response.status(201).json(postCreated);
   },
 
   getAll: async (request, response) => {

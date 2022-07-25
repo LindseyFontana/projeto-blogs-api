@@ -47,6 +47,7 @@ const postService = {
 
   getUserIdByToken: async (token) => {
   const decoded = tokenManager.validate(token);
+  console.log(decoded);
     const user = await User.findOne({ where: { email: decoded.email } });
     return user.dataValues.id;
   },
