@@ -2,7 +2,7 @@ const Joi = require('joi');
 const ApplicationError = require('../error/error');
 const { Category } = require('../database/models');
 const { BlogPost } = require('../database/models');
-const { User } = require('../database/models');
+const { User: UserModel } = require('../database/models');
 const err = require('../constants/errorMessage');
 
 const postService = {
@@ -38,11 +38,22 @@ const postService = {
   getAll: async () => {
     const posts = await BlogPost.findAll({ 
       include: [
-        { model: User, attributes: { exclude: ['password'] } },
+        { model: UserModel, attributes: { exclude: ['password'] } },
         { model: Category, through: { attributes: [] } },
       ],
     });
-    return posts;
+    const newPosts = posts.map(({ dataValues }) => dataValues)
+      .map(({ id, title, content, userId, published, updated, User, Categories }) => ({
+          id, 
+          title,
+          content, 
+          userId, 
+          published, 
+          updated, 
+          user: User.dataValues, 
+          categories: Categories,
+        }));
+    return newPosts;
   },
 };
 
