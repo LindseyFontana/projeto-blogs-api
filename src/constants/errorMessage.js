@@ -8,4 +8,5 @@ module.exports = {
   userNotExists: 'User does not exist',
   userInvalid: 'User already registered',
   postNotFound: 'Post does not exist',
+  userUnauthorized: 'Unauthorized user',
 };

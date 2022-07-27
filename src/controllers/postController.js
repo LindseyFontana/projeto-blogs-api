@@ -26,6 +26,17 @@ const postController = {
     const post = await postService.getById(id);
     response.status(200).json(post);
   },
+
+  update: async (request, response) => {
+    const { id } = request.params;
+    const dataToUpdate = request.body;
+    const token = request.headers.authorization;
+
+    const userId = await userService.getUserIdByToken(token);
+    const post = await postService.update(id, userId, dataToUpdate);
+
+    response.status(200).json(post);
+  },
 };
 
 module.exports = postController;

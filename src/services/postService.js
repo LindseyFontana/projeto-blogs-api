@@ -39,9 +39,10 @@ const postService = {
   },
 
   create: async (userId, { title, content }) => {
-    await BlogPost.create({ 
+    const test = await BlogPost.create({ 
       title, content, userId, published: new Date(), updated: new Date(),
     });
+    console.log('************', test)
     const post = await BlogPost.findOne({ where: { title, userId } });
     return post.dataValues;
   },
@@ -67,6 +68,27 @@ const postService = {
     if (!post) throw new ApplicationError(err.postNotFound, 404);
 
     return formatPost(post);
+  },
+
+  update: async (postId, userId, dataToUpdate) => {
+    const schema = Joi.object({
+      title: Joi.string().required(),
+      content: Joi.string().required(),
+     });
+    const { error } = schema.validate(dataToUpdate);
+    if (error) throw new ApplicationError(err.missingField, 400);
+    const post = await BlogPost.findByPk(postId);
+    console.log(post);
+    if (post.userId !== userId) {
+      throw new ApplicationError(err.userUnauthorized, 401);
+    }
+    post.set({
+      title: dataToUpdate.title,
+      content: dataToUpdate.content,
+      updated: new Date(),
+    });
+    await post.save();
+    return postService.getById(postId);
   },
 };
 
