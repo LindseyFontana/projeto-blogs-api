@@ -45,6 +45,15 @@ const userService = {
       const user = await User.findOne({ where: { email: decoded.email } });
       return user.dataValues.id;
   },
+
+  delete: async (userId) => {
+    await User.destroy({
+      where: {
+        id: userId,
+      },
+      force: true,
+    });
+  },
 };
 
 module.exports = userService;

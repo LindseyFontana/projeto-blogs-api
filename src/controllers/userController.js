@@ -23,6 +23,13 @@ const usersController = {
     const user = await userService.getById(id);
     response.status(200).json(user);
   },
+
+  delete: async (request, response) => {
+    const token = request.headers.authorization;
+    const userId = await userService.getUserIdByToken(token);
+    await userService.delete(Number(userId));
+    response.status(204).send();
+  },
 };
 
 module.exports = usersController;
