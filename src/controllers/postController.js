@@ -37,6 +37,15 @@ const postController = {
 
     response.status(200).json(post);
   },
+
+  delete: async (request, response) => {
+    const { id } = request.params;
+    const token = request.headers.authorization;
+
+    const userId = await userService.getUserIdByToken(token);
+    await postService.delete(Number(id), Number(userId));
+    response.status(204).send();
+  },
 };
 
 module.exports = postController;

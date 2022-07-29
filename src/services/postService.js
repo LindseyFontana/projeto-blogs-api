@@ -16,7 +16,13 @@ const formatPost = ({ id, title, content, userId, published, updated, User, Cate
   categories: Categories,
 });
 
-const validateUpdate = async (postId, userId, dataToUpdate) => {
+const validateUserAuthorazation = async (postUserId, userId) => {
+  if (postUserId !== userId) {
+    throw new ApplicationError(err.userUnauthorized, 401);
+  }
+};
+
+const validateUpdate = async (postUserId, userId, dataToUpdate) => {
   const schema = Joi.object({
     title: Joi.string().required(),
     content: Joi.string().required(),
@@ -24,12 +30,8 @@ const validateUpdate = async (postId, userId, dataToUpdate) => {
 
   const { error } = schema.validate(dataToUpdate);
   if (error) throw new ApplicationError(err.missingField, 400);
-
-  const post = await BlogPost.findByPk(postId);
-  if (post.userId !== userId) {
-    throw new ApplicationError(err.userUnauthorized, 401);
-  }
-  return post;
+  
+  return validateUserAuthorazation(postUserId, userId);
 };
 
 const postService = {
@@ -43,7 +45,7 @@ const postService = {
 
     if (error) throw new ApplicationError(err.missingField, 400);
   },
-
+  // Colocar no postCategoryService
   verifyIfExists: async (body) => {
     const category = await Category.findAll({
         where: { id: body.categoryIds },
@@ -55,10 +57,9 @@ const postService = {
   },
 
   create: async (userId, { title, content }) => {
-    const test = await BlogPost.create({ 
+    await BlogPost.create({ 
       title, content, userId, published: new Date(), updated: new Date(),
     });
-    console.log('************', test)
     const post = await BlogPost.findOne({ where: { title, userId } });
     return post.dataValues;
   },
@@ -97,6 +98,18 @@ const postService = {
     await post.save();
 
     return postService.getById(postId);
+  },
+
+  delete: async (postId, userId) => {
+    const post = await postService.getById(postId);
+    await validateUserAuthorazation(post.userId, userId);
+
+    await BlogPost.destroy({
+      where: {
+        id: postId,
+      },
+      force: true,
+    });
   },
 };
 
