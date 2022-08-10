@@ -18,7 +18,7 @@ Projeto React desenvolvido por Lindsey Oliva Fontana durante o módulo de Back-E
 
 ## ⚠️ Orientações
 <details>
-<summary><strong> Baixar dependências</strong></summary>
+<summary><strong>Dependências</strong></summary>
 
 * npm install
 * npm i node
