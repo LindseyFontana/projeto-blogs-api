@@ -1,4 +1,5 @@
 const postService = require('../services/postService');
+const categoryService = require('../services/categoryService');
 const userService = require('../services/userService');
 const postCategoryService = require('../services/postCategoryService');
 
@@ -8,7 +9,7 @@ const postController = {
     const newPost = request.body;
   
     await postService.validate(newPost);
-    await postService.verifyIfExists(newPost);
+    await categoryService.verifyIfExists(newPost);
     const userId = await userService.getUserIdByToken(token);
     const postCreated = await postService.create(userId, newPost);
     await postCategoryService.create(postCreated, newPost);

@@ -1,6 +1,7 @@
 const Joi = require('joi');
 const ApplicationError = require('../error/error');
 const { Category } = require('../database/models');
+const err = require('../constants/errorMessage');
 
 const categoryService = {
   validate: async (body) => {
@@ -22,6 +23,17 @@ const categoryService = {
     const categories = await Category.findAll();
     return categories;
   },
+
+  verifyIfExists: async (body) => {
+    const category = await Category.findAll({
+        where: { id: body.categoryIds },
+      });
+
+    if (category.length !== body.categoryIds.length) {
+      throw new ApplicationError(err.categoryNotFound, 400);
+    }
+  },
+
 };
 
 module.exports = categoryService;

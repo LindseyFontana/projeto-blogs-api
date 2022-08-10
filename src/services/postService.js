@@ -50,17 +50,6 @@ const postService = {
     if (error) throw new ApplicationError(err.missingField, 400);
   },
 
-  // Colocar no postCategoryService
-  verifyIfExists: async (body) => {
-    const category = await Category.findAll({
-        where: { id: body.categoryIds },
-      });
-
-    if (category.length !== body.categoryIds.length) {
-      throw new ApplicationError(err.categoryNotFound, 400);
-    }
-  },
-
   create: async (userId, { title, content }) => {
     await BlogPost.create({ 
       title, content, userId, published: new Date(), updated: new Date(),
@@ -105,7 +94,6 @@ const postService = {
   },
 
   delete: async (postId, userId) => {
-    // const post = await postService.getById(postId);
     await validateUserAuthorazation(postId, userId);
 
     await BlogPost.destroy({
