@@ -94,7 +94,6 @@ const postService = {
 
   update: async (postId, userId, dataToUpdate) => {
     const post = await validateUpdate(postId, userId, dataToUpdate);
-    console.log(post);
     post.set({
       title: dataToUpdate.title,
       content: dataToUpdate.content,
