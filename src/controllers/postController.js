@@ -33,7 +33,7 @@ const postController = {
     const token = request.headers.authorization;
 
     const userId = await userService.getUserIdByToken(token);
-    const post = await postService.update(id, userId, dataToUpdate);
+    const post = await postService.update(Number(id), Number(userId), dataToUpdate);
 
     response.status(200).json(post);
   },
@@ -45,6 +45,12 @@ const postController = {
     const userId = await userService.getUserIdByToken(token);
     await postService.delete(Number(id), Number(userId));
     response.status(204).send();
+  },
+
+  search: async (request, response) => {
+    const { q } = request.query;
+    const result = await postService.search(q);
+    response.status(200).json(result);
   },
 };
 

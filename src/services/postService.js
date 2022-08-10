@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { Op } = require('sequelize');
 const ApplicationError = require('../error/error');
 const { Category } = require('../database/models');
 const { BlogPost } = require('../database/models');
@@ -16,10 +17,13 @@ const formatPost = ({ id, title, content, userId, published, updated, User, Cate
   categories: Categories,
 });
 
-const validateUserAuthorazation = async (postUserId, userId) => {
-  if (postUserId !== userId) {
+const validateUserAuthorazation = async (postId, userId) => {
+  const post = await BlogPost.findByPk(postId);
+  if (!post) throw new ApplicationError(err.postNotFound, 404);
+  if (post.userId !== userId) {
     throw new ApplicationError(err.userUnauthorized, 401);
   }
+  return post;
 };
 
 const validateUpdate = async (postUserId, userId, dataToUpdate) => {
@@ -45,6 +49,7 @@ const postService = {
 
     if (error) throw new ApplicationError(err.missingField, 400);
   },
+
   // Colocar no postCategoryService
   verifyIfExists: async (body) => {
     const category = await Category.findAll({
@@ -89,7 +94,7 @@ const postService = {
 
   update: async (postId, userId, dataToUpdate) => {
     const post = await validateUpdate(postId, userId, dataToUpdate);
-    
+    console.log(post);
     post.set({
       title: dataToUpdate.title,
       content: dataToUpdate.content,
@@ -101,8 +106,8 @@ const postService = {
   },
 
   delete: async (postId, userId) => {
-    const post = await postService.getById(postId);
-    await validateUserAuthorazation(post.userId, userId);
+    // const post = await postService.getById(postId);
+    await validateUserAuthorazation(postId, userId);
 
     await BlogPost.destroy({
       where: {
@@ -110,6 +115,23 @@ const postService = {
       },
       force: true,
     });
+  },
+
+  search: async (searchTerm) => {
+    if (!searchTerm) return postService.getAll();
+    const posts = await BlogPost.findAll({
+      where: { 
+        [Op.or]: [
+        { title: { [Op.like]: `%${searchTerm}%` } }, 
+        { content: { [Op.like]: `%${searchTerm}%` } }],
+      },
+      include: [
+        { model: UserModel, attributes: { exclude: ['password'] } },
+        { model: Category, through: { attributes: [] } },
+      ] });
+    const formatPosts = posts.map(({ dataValues }) => dataValues)
+      .map((post) => formatPost(post));
+    return formatPosts;
   },
 };
 

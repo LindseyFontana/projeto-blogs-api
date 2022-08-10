@@ -33,7 +33,6 @@ describe(requirements[11].description, () => {
         const { body } = response;
         const result = JSON.parse(body);
         token = result.token;
-        console.log(token)
       });
 
     await frisby

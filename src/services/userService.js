@@ -23,10 +23,7 @@ const userService = {
     return user;
   },
 
-  create: async (newUser) => {
-    const user = await User.create(newUser);
-    return user;
-  },
+  create: async (newUser) => User.create(newUser),
 
   getAll: async () => {
     const users = await User.findAll({ attributes: { exclude: 'password' } });
@@ -41,16 +38,13 @@ const userService = {
 
   getUserIdByToken: async (token) => {
     const decoded = tokenManager.validate(token);
-    console.log(decoded);
       const user = await User.findOne({ where: { email: decoded.email } });
       return user.dataValues.id;
   },
 
   delete: async (userId) => {
     await User.destroy({
-      where: {
-        id: userId,
-      },
+      where: { id: userId },
       force: true,
     });
   },
