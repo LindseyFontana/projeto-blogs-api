@@ -18,7 +18,7 @@ Projeto React desenvolvido por Lindsey Oliva Fontana durante o módulo de Back-E
 
 ## ⚠️ Orientações
 <details>
-<summary><strong>:computer: Baixar dependências</strong></summary>
+<summary><strong> Baixar dependências</strong></summary>
 
 * npm install
 * npm i node
@@ -31,7 +31,7 @@ Projeto React desenvolvido por Lindsey Oliva Fontana durante o módulo de Back-E
 </details>
 
 <details>
-<summary><strong>:computer: Banco de dados </strong></summary>
+<summary><strong> Banco de dados </strong></summary>
  <br />
 <strong>Executar os comandos no terminal: </strong>
 <br />
@@ -47,7 +47,7 @@ Para popular banco de dados
 
 <details>
  <br />
- <summary><strong>:computer: Executar a aplicação </strong></summary>
+ <summary><strong> Executar a aplicação </strong></summary>
 
   * npm start
 
