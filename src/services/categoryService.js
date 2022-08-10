@@ -33,7 +33,6 @@ const categoryService = {
       throw new ApplicationError(err.categoryNotFound, 400);
     }
   },
-
 };
 
 module.exports = categoryService;
