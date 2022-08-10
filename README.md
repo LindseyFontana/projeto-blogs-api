@@ -1,5 +1,5 @@
 # Descrição
-Este projeto consiste em uma aplicação Node que cria uma API e um banco de dados via ORM (Sequelize). Simula um Blog, a API expõe endpoints que fazer um CRUD de posts e usuários.
+Este projeto consiste em uma aplicação Node que cria uma API e um banco de dados via ORM (Sequelize). Simula um Blog, a API expõe endpoints que fazem CRUD de posts e usuários.
 <br />
 
 Projeto React desenvolvido por Lindsey Oliva Fontana durante o módulo de Back-End do curso de desenvolvimento web da escola Trybe 🚀
