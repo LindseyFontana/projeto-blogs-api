@@ -19,7 +19,7 @@ const userService = {
 
   verifyIfExists: async (email) => {
     const user = await User.findOne({ where: { email } });
-    if (user) throw new ApplicationError(err.userInvalid, 409);
+    if (user) throw new ApplicationError(err.USER_INVALID, 409);
     return user;
   },
 
@@ -32,7 +32,7 @@ const userService = {
 
   getById: async (id) => {
     const user = await User.findByPk(id, { attributes: { exclude: 'password' } });
-    if (!user) throw new ApplicationError(err.userNotExists, 404);
+    if (!user) throw new ApplicationError(err.USER_NOT_EXISTS, 404);
     return user;
   },
 

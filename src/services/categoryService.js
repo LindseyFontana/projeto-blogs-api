@@ -30,7 +30,7 @@ const categoryService = {
       });
 
     if (category.length !== body.categoryIds.length) {
-      throw new ApplicationError(err.categoryNotFound, 400);
+      throw new ApplicationError(err.CATEGORY_NOT_FOUND, 400);
     }
   },
 };

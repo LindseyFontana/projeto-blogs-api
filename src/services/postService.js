@@ -19,9 +19,9 @@ const formatPost = ({ id, title, content, userId, published, updated, User, Cate
 
 const validateUserAuthorazation = async (postId, userId) => {
   const post = await BlogPost.findByPk(postId);
-  if (!post) throw new ApplicationError(err.postNotFound, 404);
+  if (!post) throw new ApplicationError(err.POST_NOT_FOUND, 404);
   if (post.userId !== userId) {
-    throw new ApplicationError(err.userUnauthorized, 401);
+    throw new ApplicationError(err.USER_UNAUTHORIZED, 401);
   }
   return post;
 };
@@ -33,7 +33,7 @@ const validateUpdate = async (postUserId, userId, dataToUpdate) => {
    });
 
   const { error } = schema.validate(dataToUpdate);
-  if (error) throw new ApplicationError(err.missingField, 400);
+  if (error) throw new ApplicationError(err.MISSING_FIELD, 400);
   
   return validateUserAuthorazation(postUserId, userId);
 };
@@ -47,7 +47,7 @@ const postService = {
     });
     const { error } = schema.validate(body);
 
-    if (error) throw new ApplicationError(err.missingField, 400);
+    if (error) throw new ApplicationError(err.MISSING_FIELD, 400);
   },
 
   create: async (userId, { title, content }) => {
@@ -76,7 +76,7 @@ const postService = {
         { model: Category, through: { attributes: [] } },
       ] });
     
-    if (!post) throw new ApplicationError(err.postNotFound, 404);
+    if (!post) throw new ApplicationError(err.POST_NOT_FOUND, 404);
 
     return formatPost(post);
   },
