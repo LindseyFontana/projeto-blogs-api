@@ -11,7 +11,7 @@ const app = express();
 
 app.use(express.json());
 
-app.post('/login', loginController.validate);
+app.post('/login', loginController.authenticate);
 
 app.use('/user', userRouter);
 

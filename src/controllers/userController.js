@@ -4,9 +4,6 @@ const tokenManager = require('../security/tokenManager');
 const usersController = {
   create: async (request, response) => {
     const newUser = request.body;
-
-    await userService.validate(newUser);
-    await userService.verifyIfExists(newUser.email);
     await userService.create(newUser);
   
     const token = tokenManager.create(newUser);
@@ -26,7 +23,7 @@ const usersController = {
 
   delete: async (request, response) => {
     const token = request.headers.authorization;
-    const userId = await userService.getUserIdByToken(token);
+    const userId = await userService.extractUserIdFromAccessToken(token);
     await userService.delete(Number(userId));
     response.status(204).send();
   },
