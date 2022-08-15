@@ -49,7 +49,6 @@ const userService = {
   delete: async (userId) => {
     await User.destroy({
       where: { id: userId },
-      force: true,
     });
   },
 };

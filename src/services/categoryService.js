@@ -3,17 +3,19 @@ const ApplicationError = require('../error/error');
 const { Category } = require('../database/models');
 const err = require('../constants/errorMessage');
 
-const categoryService = {
-  validate: async (body) => {
-    const schema = Joi.object({
-      name: Joi.string().required(),
-    });
+const validate = async (body) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+  });
   const { error } = schema.validate(body);
 
   if (error) throw new ApplicationError(error.details[0].message, 400);
-  },
+};
 
-  create: async ({ name }) => {
+const categoryService = {
+  create: async (body) => {
+    const { name } = body;
+    await validate(body);
     await Category.create({ name });
     const category = await Category.findOne({ where: { name } });
     return category.dataValues;

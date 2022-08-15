@@ -100,7 +100,6 @@ const postService = {
       where: {
         id: postId,
       },
-      force: true,
     });
   },
 
