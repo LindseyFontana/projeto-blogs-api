@@ -22,6 +22,7 @@ const formatPost = ({ id, title, content, userId, published, updated, User, Cate
 const validateUserAuthorazation = async (postId, userId) => {
   const post = await BlogPost.findByPk(postId);
   if (!post) throw new ApplicationError(err.POST_NOT_FOUND, 404);
+
   if (post.userId !== userId) {
     throw new ApplicationError(err.USER_UNAUTHORIZED, 401);
   }
@@ -56,56 +57,83 @@ const authenticate = async (newPost) => {
   await categoryService.verifyIfExists(newPost.categoryIds);
 };
 
+const searchPostByTerm = async (searchTerm) =>
+  BlogPost.findAll({
+    where: { 
+      [Op.or]: [
+      { title: { [Op.like]: `%${searchTerm}%` } }, 
+      { content: { [Op.like]: `%${searchTerm}%` } }],
+    },
+    include: [
+      { model: UserModel, attributes: { exclude: ['password'] } },
+      { model: Category, through: { attributes: [] } },
+    ] });
+
+const updatePost = async (post, dataToUpdate) => {
+  post.set({
+    title: dataToUpdate.title,
+    content: dataToUpdate.content,
+    updated: new Date(),
+  });
+  await post.save();
+};
+
+const findAllPosts = async () => 
+  BlogPost.findAll({ 
+    include: [
+      { model: UserModel, attributes: { exclude: ['password'] } },
+      { model: Category, through: { attributes: [] } },
+    ],
+  });
+
+const findPostById = async (postId) => 
+  BlogPost.findByPk(postId, { include: [
+    { model: UserModel, attributes: { exclude: ['password'] } },
+    { model: Category, through: { attributes: [] } },
+  ] });
+
+const createPost = async ({ title, content }, userId) => 
+  BlogPost.create({ 
+    title, content, userId, published: new Date(), updated: new Date(),
+  });
+
+const findPostByInfos = async (newPost, userId) => 
+  BlogPost.findOne({ where: { 
+    title: newPost.title, 
+    userId,
+  } });
+
 const postService = {
   create: async (token, newPost) => {
-    const { title, content } = newPost;
     await authenticate(newPost);
     const userId = await userService.extractUserIdFromAccessToken(token);
-    await BlogPost.create({ 
-      title, content, userId, published: new Date(), updated: new Date(),
-    });
-    const post = await BlogPost.findOne({ where: { title, userId } });
-    return post.dataValues;
+    await createPost(newPost, userId);
+    const postCreated = await findPostByInfos(newPost, userId);
+    return postCreated.dataValues;
   },
 
   getAll: async () => {
-    const posts = await BlogPost.findAll({ 
-      include: [
-        { model: UserModel, attributes: { exclude: ['password'] } },
-        { model: Category, through: { attributes: [] } },
-      ],
-    });
-    const newPosts = posts.map(({ dataValues }) => dataValues)
+    const posts = await findAllPosts();
+    return posts.map(({ dataValues }) => dataValues)
       .map((post) => formatPost(post));
-    return newPosts;
   },
 
   getById: async (postId) => {
-    const post = await BlogPost.findByPk(postId, { include: [
-        { model: UserModel, attributes: { exclude: ['password'] } },
-        { model: Category, through: { attributes: [] } },
-      ] });
-    
+    const post = await findPostById(postId);    
     if (!post) throw new ApplicationError(err.POST_NOT_FOUND, 404);
-
+  
     return formatPost(post);
   },
 
   update: async (postId, userId, dataToUpdate) => {
     const post = await validateUpdate(postId, userId, dataToUpdate);
-    post.set({
-      title: dataToUpdate.title,
-      content: dataToUpdate.content,
-      updated: new Date(),
-    });
-    await post.save();
-
+    await updatePost(post, dataToUpdate);
+  
     return postService.getById(postId);
   },
 
   delete: async (postId, userId) => {
     await validateUserAuthorazation(postId, userId);
-
     await BlogPost.destroy({
       where: {
         id: postId,
@@ -115,20 +143,12 @@ const postService = {
 
   search: async (searchTerm) => {
     if (!searchTerm) return postService.getAll();
-    const posts = await BlogPost.findAll({
-      where: { 
-        [Op.or]: [
-        { title: { [Op.like]: `%${searchTerm}%` } }, 
-        { content: { [Op.like]: `%${searchTerm}%` } }],
-      },
-      include: [
-        { model: UserModel, attributes: { exclude: ['password'] } },
-        { model: Category, through: { attributes: [] } },
-      ] });
-    const formatPosts = posts.map(({ dataValues }) => dataValues)
+    
+    const posts = await searchPostByTerm(searchTerm);
+    return posts.map(({ dataValues }) => dataValues)
       .map((post) => formatPost(post));
-    return formatPosts;
   },
+
 };
 
 module.exports = postService;
