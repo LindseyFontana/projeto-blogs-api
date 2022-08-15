@@ -26,12 +26,12 @@ const categoryService = {
     return categories;
   },
 
-  verifyIfExists: async (body) => {
+  verifyIfExists: async (categoryIds) => {
     const category = await Category.findAll({
-        where: { id: body.categoryIds },
+        where: { id: categoryIds },
       });
 
-    if (category.length !== body.categoryIds.length) {
+    if (category.length !== categoryIds.length) {
       throw new ApplicationError(err.CATEGORY_NOT_FOUND, 400);
     }
   },

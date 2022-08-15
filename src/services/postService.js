@@ -3,6 +3,8 @@ const { Op } = require('sequelize');
 const ApplicationError = require('../error/error');
 const { Category } = require('../database/models');
 const { BlogPost } = require('../database/models');
+const categoryService = require('./categoryService');
+const userService = require('./userService');
 const { User: UserModel } = require('../database/models');
 const err = require('../constants/errorMessage');
 
@@ -38,19 +40,27 @@ const validateUpdate = async (postUserId, userId, dataToUpdate) => {
   return validateUserAuthorazation(postUserId, userId);
 };
 
+const validateRequestToCreatePost = (newPost) => {
+  const schema = Joi.object({
+    title: Joi.string().required(),
+    content: Joi.string().required(),
+    categoryIds: Joi.array().required(),
+   });
+   const { error } = schema.validate(newPost);
+  
+   if (error) throw new ApplicationError(err.MISSING_FIELD, 400);
+};
+
+const authenticate = async (newPost) => {
+  validateRequestToCreatePost(newPost);
+  await categoryService.verifyIfExists(newPost.categoryIds);
+};
+
 const postService = {
-  validate: async (body) => {
-     const schema = Joi.object({
-     title: Joi.string().required(),
-     content: Joi.string().required(),
-     categoryIds: Joi.array().required(),
-    });
-    const { error } = schema.validate(body);
-
-    if (error) throw new ApplicationError(err.MISSING_FIELD, 400);
-  },
-
-  create: async (userId, { title, content }) => {
+  create: async (token, newPost) => {
+    const { title, content } = newPost;
+    await authenticate(newPost);
+    const userId = await userService.extractUserIdFromAccessToken(token);
     await BlogPost.create({ 
       title, content, userId, published: new Date(), updated: new Date(),
     });
