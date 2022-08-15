@@ -5,8 +5,8 @@ const usersController = {
   create: async (request, response) => {
     const newUser = request.body;
 
-    await userService.validate(newUser);
-    await userService.verifyIfExists(newUser.email);
+    // await userService.validate(newUser);
+    // await userService.verifyIfExists(newUser.email);
     await userService.create(newUser);
   
     const token = tokenManager.create(newUser);
