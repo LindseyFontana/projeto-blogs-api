@@ -1,8 +1,7 @@
 const Joi = require('joi');
 const { Op } = require('sequelize');
 const ApplicationError = require('../error/error');
-const { Category } = require('../database/models');
-const { BlogPost } = require('../database/models');
+const { Category, BlogPost } = require('../database/models');
 const categoryService = require('./categoryService');
 const userService = require('./userService');
 const { User: UserModel } = require('../database/models');
