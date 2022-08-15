@@ -40,7 +40,7 @@ const userService = {
     return user;
   },
 
-  getUserIdByToken: async (token) => {
+  extractUserIdFromAccessToken: async (token) => {
     const decoded = tokenManager.validate(token);
       const user = await User.findOne({ where: { email: decoded.email } });
       return user.dataValues.id;

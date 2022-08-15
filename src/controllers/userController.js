@@ -23,7 +23,7 @@ const usersController = {
 
   delete: async (request, response) => {
     const token = request.headers.authorization;
-    const userId = await userService.getUserIdByToken(token);
+    const userId = await userService.extractUserIdFromAccessToken(token);
     await userService.delete(Number(userId));
     response.status(204).send();
   },
