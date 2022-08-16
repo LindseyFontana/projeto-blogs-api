@@ -38,11 +38,11 @@ Projeto Node.js desenvolvido por Lindsey Oliva Fontana durante o módulo de Back
 <br />
   
 Para criar banco de dados
-  * db:create
-  * sequelize-cli db:migrate
+  * npx sequelize-cli db:create
+  * npx sequelize-cli sequelize-cli db:migrate
 
 Para popular banco de dados
- * db:seed:all
+ * npx sequelize-cli db:seed:all
 <br />
 </details>
 
