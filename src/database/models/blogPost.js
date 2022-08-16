@@ -1,4 +1,3 @@
-
 'use strict';
 const BlogPost = (sequelize, DataTypes) => {
   const BlogPost = sequelize.define('BlogPost', {
@@ -19,7 +18,6 @@ const BlogPost = (sequelize, DataTypes) => {
   BlogPost.associate = (models) => {
     BlogPost.belongsTo(models.User,
       { foreignKey: 'userId' });
-      // ,  as: 'user'
   };
   
   return BlogPost;

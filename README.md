@@ -3,6 +3,7 @@ Este projeto consiste em uma aplicação Node que cria uma API e um banco de dad
 <br />
 
 Projeto Node.js desenvolvido por Lindsey Oliva Fontana durante o módulo de Back-End do curso de desenvolvimento web da escola Trybe 🚀
+
 <br />
 
 ## 🛠 Ferramentas

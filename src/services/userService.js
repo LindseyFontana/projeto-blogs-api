@@ -4,26 +4,30 @@ const { User } = require('../database/models');
 const err = require('../constants/errorMessage');
 const tokenManager = require('../security/tokenManager');
 
+const authenticate = async (newUser) => {
+  const schema = Joi.object({
+   displayName: Joi.string().min(8).required(),
+   email: Joi.string().email().required(),
+   password: Joi.string().min(6).required(),
+   image: Joi.string(),
+  });
+  const { error } = schema.validate(newUser);
+
+  if (error) throw new ApplicationError(error.details[0].message, 400);
+ };
+
+const verifyIfExists = async (email) => {
+  const user = await User.findOne({ where: { email } });
+  if (user) throw new ApplicationError(err.USER_INVALID, 409);
+  return user;
+};
+
 const userService = {
-  validate: async (newUser) => {
-   const schema = Joi.object({
-    displayName: Joi.string().min(8).required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().min(6).required(),
-    image: Joi.string(),
-   });
-   const { error } = schema.validate(newUser);
-
-   if (error) throw new ApplicationError(error.details[0].message, 400);
+  create: async (newUser) => {
+    await authenticate(newUser);
+    await verifyIfExists(newUser.email);
+    return User.create(newUser);
   },
-
-  verifyIfExists: async (email) => {
-    const user = await User.findOne({ where: { email } });
-    if (user) throw new ApplicationError(err.userInvalid, 409);
-    return user;
-  },
-
-  create: async (newUser) => User.create(newUser),
 
   getAll: async () => {
     const users = await User.findAll({ attributes: { exclude: 'password' } });
@@ -32,11 +36,11 @@ const userService = {
 
   getById: async (id) => {
     const user = await User.findByPk(id, { attributes: { exclude: 'password' } });
-    if (!user) throw new ApplicationError(err.userNotExists, 404);
+    if (!user) throw new ApplicationError(err.USER_NOT_EXISTS, 404);
     return user;
   },
 
-  getUserIdByToken: async (token) => {
+  extractUserIdFromAccessToken: async (token) => {
     const decoded = tokenManager.validate(token);
       const user = await User.findOne({ where: { email: decoded.email } });
       return user.dataValues.id;
@@ -45,7 +49,6 @@ const userService = {
   delete: async (userId) => {
     await User.destroy({
       where: { id: userId },
-      force: true,
     });
   },
 };
