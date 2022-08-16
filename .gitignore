@@ -10,7 +10,7 @@
 
 # production
 /build
-/recursosTrybe
+/TrybeRecursos
 
 # misc
 .DS_Store
