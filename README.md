@@ -8,6 +8,7 @@ Projeto Node.js desenvolvido por Lindsey Oliva Fontana durante o módulo de Back
 
 ## 🛠 Ferramentas
 * JavaScript ES6+
+* Node
 * Express
 * Express async errors
 * Sequelize
@@ -22,12 +23,7 @@ Projeto Node.js desenvolvido por Lindsey Oliva Fontana durante o módulo de Back
 <summary><strong>Dependências</strong></summary>
 
 * npm install
-* npm i node
-* npm i express express-async-errors
-* npm i sequelize sequelize-cli
-* npm i mysql2
-* npm i dotenv
-* npm i jsonwebtoken
+ 
 <br />
 </details>
 
