@@ -33,11 +33,11 @@ Projeto Node.js desenvolvido por Lindsey Oliva Fontana durante o módulo de Back
 <strong>Executar os comandos no terminal: </strong>
 <br />
   
-Para criar banco de dados
+Para criar o banco de dados
   * npx sequelize-cli db:create
   * npx sequelize-cli sequelize-cli db:migrate
 
-Para popular banco de dados
+Para popular o banco de dados
  * npx sequelize-cli db:seed:all
 <br />
 </details>
