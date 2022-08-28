@@ -44,7 +44,7 @@ Para popular banco de dados
 
 <details>
  <br />
- <summary><strong> Executar a aplicação </strong></summary>
+ <summary><strong> Executar</strong></summary>
 
   * npm start
 
