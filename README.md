@@ -20,7 +20,7 @@ Projeto Node.js desenvolvido por Lindsey Oliva Fontana durante o módulo de Back
 
 ## ⚠️ Orientações
 <details>
-<summary><strong>Dependências</strong></summary>
+<summary><strong>Instalar dependências</strong></summary>
 
 * npm install
  
