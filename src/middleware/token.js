@@ -7,8 +7,8 @@ const validate = async (request, _response, next) => {
     const token = request.headers.authorization;
     if (!token) throw new ApplicationError(err.TOKEN_NOT_FOUND, 401);
     try {
-      const decoded = tokenManager.validate(token);
-      console.log('*******', decoded);
+      const decode = tokenManager.validate(token);
+      request.body = {...request.body, userId: decode.id}
       next();
     } catch (e) {
       throw new ApplicationError(err.TOKEN_EXPIRED, 401);

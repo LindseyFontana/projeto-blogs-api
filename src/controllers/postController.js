@@ -6,6 +6,7 @@ const postController = {
   create: async (request, response) => {
     const token = request.headers.authorization;
     const newPost = request.body;
+    console.log(newPost)
     const postCreated = await postService.create(token, newPost);
     await postCategoryService.create(postCreated, newPost);
   

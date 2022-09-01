@@ -1,7 +1,8 @@
 const Joi = require('joi');
 const ApplicationError = require('../error/error');
-const { User } = require('../database/models');
 const err = require('../constants/errorMessage');
+const userService = require('./userService');
+const tokenManager = require('../security/tokenManager');
 
 const authenticatePayload = (body) => {
   const schema = Joi.object({
@@ -16,11 +17,11 @@ const authenticatePayload = (body) => {
 const loginService = {
   authenticate: async (body) => {
     authenticatePayload(body);
+    const {id, email} = await userService.getUser(body);
+  
+    if (!id || !email) throw new ApplicationError(err.INVALID_FIELD, 400);
 
-    const { email, password } = body;
-    const user = await User.findOne({ where: { email, password }, attributes: { exclude: 'password' } });
-    
-    if (!user) throw new ApplicationError(err.INVALID_FIELD, 400);
+    return tokenManager.create({id, email});
   },
 };
 

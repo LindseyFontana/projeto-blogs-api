@@ -45,6 +45,7 @@ const validateRequestToCreatePost = (newPost) => {
     title: Joi.string().required(),
     content: Joi.string().required(),
     categoryIds: Joi.array().required(),
+    userId: Joi.number().required(),
    });
    const { error } = schema.validate(newPost);
   
@@ -91,23 +92,22 @@ const findPostById = async (postId) =>
     { model: Category, through: { attributes: [] } },
   ] });
 
-const createPost = async ({ title, content }, userId) => 
+const createPost = async ({ title, content, userId }) => 
   BlogPost.create({ 
     title, content, userId, published: new Date(), updated: new Date(),
   });
 
-const findPostByInfos = async (newPost, userId) => 
+const findPostByInfos = async (newPost) => 
   BlogPost.findOne({ where: { 
     title: newPost.title, 
-    userId,
+    userId: newPost.userId,
   } });
 
 const postService = {
   create: async (token, newPost) => {
     await authenticate(newPost);
-    const userId = await userService.extractUserIdFromAccessToken(token);
-    await createPost(newPost, userId);
-    const postCreated = await findPostByInfos(newPost, userId);
+    await createPost(newPost);
+    const postCreated = await findPostByInfos(newPost);
     return postCreated.dataValues;
   },
 

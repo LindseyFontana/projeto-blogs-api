@@ -3,9 +3,8 @@ const ApplicationError = require('../error/error');
 const { User } = require('../database/models');
 const err = require('../constants/errorMessage');
 const tokenManager = require('../security/tokenManager');
-const { decode } = require('jsonwebtoken');
 
-const authenticate = async (newUser) => {
+const validateBody = async (newUser) => {
   const schema = Joi.object({
    displayName: Joi.string().min(8).required(),
    email: Joi.string().email().required(),
@@ -25,9 +24,11 @@ const verifyIfExists = async (email) => {
 
 const userService = {
   create: async (newUser) => {
-    await authenticate(newUser);
+    await validateBody(newUser);
     await verifyIfExists(newUser.email);
-    return User.create(newUser);
+    await User.create(newUser);
+    const {id, email} = await userService.getUser(newUser)
+    return tokenManager.create({id, email});
   },
 
   getAll: async () => {
@@ -39,6 +40,12 @@ const userService = {
     const user = await User.findByPk(id, { attributes: { exclude: 'password' } });
     if (!user) throw new ApplicationError(err.USER_NOT_EXISTS, 404);
     return user;
+  },
+
+  getUser: async (body) => {
+    const {email, password } = body
+    const user = await User.findOne({ where: { email, password }, attributes: { exclude: 'password' } });
+    return user.dataValues;
   },
 
   extractUserIdFromAccessToken: async (token) => {
