@@ -3,6 +3,7 @@ const ApplicationError = require('../error/error');
 const { User } = require('../database/models');
 const err = require('../constants/errorMessage');
 const tokenManager = require('../security/tokenManager');
+const { decode } = require('jsonwebtoken');
 
 const authenticate = async (newUser) => {
   const schema = Joi.object({
@@ -41,9 +42,8 @@ const userService = {
   },
 
   extractUserIdFromAccessToken: async (token) => {
-    const decoded = tokenManager.validate(token);
-      const user = await User.findOne({ where: { email: decoded.email } });
-      return user.dataValues.id;
+    const { id } = tokenManager.validate(token);
+    return id;
   },
 
   delete: async (userId) => {

@@ -1,12 +1,14 @@
 const userService = require('../services/userService');
 const tokenManager = require('../security/tokenManager');
+const { User } = require('../database/models');
 
 const usersController = {
   create: async (request, response) => {
     const newUser = request.body;
     await userService.create(newUser);
-  
-    const token = tokenManager.create(newUser);
+    const { id } = await User.findOne({where: {email: newUser.email}, attributes: { exclude: 'password' } });
+    const infosToken = {id, email: newUser.email}
+    const token = tokenManager.create(infosToken);
     response.status(201).json({ token });
   },
 

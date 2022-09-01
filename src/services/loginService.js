@@ -18,7 +18,7 @@ const loginService = {
     authenticatePayload(body);
 
     const { email, password } = body;
-    const user = await User.findOne({ where: { email, password } });
+    const user = await User.findOne({ where: { email, password }, attributes: { exclude: 'password' } });
     
     if (!user) throw new ApplicationError(err.INVALID_FIELD, 400);
   },
