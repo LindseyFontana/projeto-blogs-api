@@ -17,7 +17,7 @@ const formatPost = ({ id, title, content, userId, published, updated, User, Cate
   categories: Categories,
 });
 
-const validateUserAuthorazation = async (postId, userId) => {
+const verifyUserAuthorazation = async (postId, userId) => {
   const post = await BlogPost.findByPk(postId);
   if (!post) throw new ApplicationError(err.POST_NOT_FOUND, 404);
 
@@ -66,12 +66,13 @@ const searchPostByTerm = async (searchTerm) =>
     ] });
 
 const updatePost = async (post, dataToUpdate) => {
-  post.set({
+  const postUpdated = post.set({
     title: dataToUpdate.title,
     content: dataToUpdate.content,
     updated: new Date(),
   });
   await post.save();
+  return postUpdated
 };
 
 const findAllPosts = async () => 
@@ -115,14 +116,12 @@ const postService = {
 
   update: async (postId, dataToUpdate, userId) => {
     await validateUpdate(dataToUpdate);
-    const post = await validateUserAuthorazation(postId, userId);
-    await updatePost(post, dataToUpdate, userId);
-  
-    return postService.getById(postId);
+    const post = await verifyUserAuthorazation(postId, userId);
+    return updatePost(post, dataToUpdate, userId);
   },
 
   delete: async (postId, userId) => {
-    await validateUserAuthorazation(postId, userId);
+    await verifyUserAuthorazation(postId, userId);
     await BlogPost.destroy({
       where: {
         id: postId,

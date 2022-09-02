@@ -20,8 +20,7 @@ const categoryService = {
   },
 
   getAll: async () => {
-    const categories = await Category.findAll();
-    return categories;
+    return Category.findAll();
   },
 
   verifyIfExists: async (categoryIds) => {

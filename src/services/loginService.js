@@ -18,7 +18,6 @@ const loginService = {
   authenticate: async (body) => {
     validateRequestBody(body);
     const {id, email} = await userService.getUser(body);
-  
     if (!id || !email) throw new ApplicationError(err.INVALID_FIELD, 400);
 
     return tokenManager.create({id, email});
