@@ -3,8 +3,7 @@ var httpContext = require('express-http-context');
 
 const usersController = {
   create: async (request, response) => {
-    const newUser = request.body;
-    const token = await userService.create(newUser);
+    const token = await userService.create(request.body);
     response.status(201).json({ token });
   },
 

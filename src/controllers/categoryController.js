@@ -2,8 +2,7 @@ const categoryService = require('../services/categoryService');
 
 const categoryController = {
   create: async (request, response) => {
-    const newCategory = request.body;
-    const category = await categoryService.create(newCategory);
+    const category = await categoryService.create(request.body);
     response.status(201).json(category);
   },
 

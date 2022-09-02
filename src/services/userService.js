@@ -26,9 +26,10 @@ const userService = {
   create: async (newUser) => {
     await validateRequestBody(newUser);
     await verifyIfExists(newUser.email);
-    await User.create(newUser);
-    const { id, email } = await userService.getUser(newUser)
-    return tokenManager.create({id, email});
+    const user = await User.create(newUser);
+    const idUser = user.null;
+    const emailUser = user.dataValues.email;
+    return tokenManager.create({idUser, emailUser });
   },
 
   getAll: async () => {

@@ -14,11 +14,9 @@ const validate = async (body) => {
 
 const categoryService = {
   create: async (body) => {
-    const { name } = body;
     await validate(body);
-    await Category.create({ name });
-    const category = await Category.findOne({ where: { name } });
-    return category.dataValues;
+    const newCategory = await Category.create(body);
+    return {...newCategory.dataValues, id: newCategory.null};
   },
 
   getAll: async () => {

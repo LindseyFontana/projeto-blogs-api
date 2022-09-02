@@ -3,8 +3,7 @@ const loginService = require('../services/loginService');
 
 const loginController = {
   authenticate: async (request, response) => {
-    const authCredentials = request.body;
-    const token = await loginService.authenticate(authCredentials);
+    const token = await loginService.authenticate(request.body);
     response.status(200).json({ token });
   },
 };
