@@ -4,7 +4,7 @@ const err = require('../constants/errorMessage');
 const userService = require('./userService');
 const tokenManager = require('../security/tokenManager');
 
-const authenticatePayload = (body) => {
+const validateRequestBody = (body) => {
   const schema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().required(),
@@ -16,7 +16,7 @@ const authenticatePayload = (body) => {
 
 const loginService = {
   authenticate: async (body) => {
-    authenticatePayload(body);
+    validateRequestBody(body);
     const {id, email} = await userService.getUser(body);
   
     if (!id || !email) throw new ApplicationError(err.INVALID_FIELD, 400);

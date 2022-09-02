@@ -14,13 +14,14 @@ const usersController = {
 
   getById: async (request, response) => {
     const { id } = request.params;
-    const user = await userService.getById(id);
+    const user = await userService.getById(Number(id));
     response.status(200).json(user);
   },
 
   delete: async (request, response) => {
+    const idToDelete = request.params.id;
     const { userId } = request.body;
-    await userService.delete(userId);
+    await userService.delete(userId, Number(idToDelete));
     response.status(204).send();
   },
 };

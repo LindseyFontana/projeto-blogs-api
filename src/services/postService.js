@@ -3,7 +3,6 @@ const { Op } = require('sequelize');
 const ApplicationError = require('../error/error');
 const { Category, BlogPost } = require('../database/models');
 const categoryService = require('./categoryService');
-const userService = require('./userService');
 const { User: UserModel } = require('../database/models');
 const err = require('../constants/errorMessage');
 
@@ -40,7 +39,7 @@ const validateUpdate = async (postUserId, dataToUpdate) => {
   return validateUserAuthorazation(postUserId, dataToUpdate.userId);
 };
 
-const validateRequestToCreatePost = (newPost) => {
+const validateRequestBody = (newPost) => {
   const schema = Joi.object({
     title: Joi.string().required(),
     content: Joi.string().required(),
@@ -53,7 +52,7 @@ const validateRequestToCreatePost = (newPost) => {
 };
 
 const authenticate = async (newPost) => {
-  validateRequestToCreatePost(newPost);
+  validateRequestBody(newPost);
   await categoryService.verifyIfExists(newPost.categoryIds);
 };
 

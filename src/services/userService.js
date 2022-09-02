@@ -4,7 +4,7 @@ const { User } = require('../database/models');
 const err = require('../constants/errorMessage');
 const tokenManager = require('../security/tokenManager');
 
-const validateBody = async (newUser) => {
+const validateRequestBody = async (newUser) => {
   const schema = Joi.object({
    displayName: Joi.string().min(8).required(),
    email: Joi.string().email().required(),
@@ -24,10 +24,10 @@ const verifyIfExists = async (email) => {
 
 const userService = {
   create: async (newUser) => {
-    await validateBody(newUser);
+    await validateRequestBody(newUser);
     await verifyIfExists(newUser.email);
     await User.create(newUser);
-    const {id, email} = await userService.getUser(newUser)
+    const { id, email } = await userService.getUser(newUser)
     return tokenManager.create({id, email});
   },
 
@@ -43,12 +43,15 @@ const userService = {
   },
 
   getUser: async (body) => {
-    const {email, password } = body
+    const { email, password } = body
     const user = await User.findOne({ where: { email, password }, attributes: { exclude: 'password' } });
     return user.dataValues;
   },
   
-  delete: async (userId) => {
+  delete: async (userId, idToDelete) => {
+    if (userId !== idToDelete) {
+      throw new ApplicationError(err.USER_UNAUTHORIZED, 401)
+    }
     await User.destroy({
       where: { id: userId },
     });

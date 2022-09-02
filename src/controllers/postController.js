@@ -18,7 +18,7 @@ const postController = {
 
   getById: async (request, response) => {
     const { id } = request.params;
-    const post = await postService.getById(id);
+    const post = await postService.getById(Number(id));
     response.status(200).json(post);
   },
 
