@@ -47,12 +47,7 @@ const userService = {
     const user = await User.findOne({ where: { email, password }, attributes: { exclude: 'password' } });
     return user.dataValues;
   },
-
-  extractUserIdFromAccessToken: async (token) => {
-    const { id } = tokenManager.validate(token);
-    return id;
-  },
-
+  
   delete: async (userId) => {
     await User.destroy({
       where: { id: userId },

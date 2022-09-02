@@ -28,7 +28,7 @@ const validateUserAuthorazation = async (postId, userId) => {
   return post;
 };
 
-const validateUpdate = async (postUserId, userId, dataToUpdate) => {
+const validateUpdate = async (postUserId, dataToUpdate) => {
   const schema = Joi.object({
     title: Joi.string().required(),
     content: Joi.string().required(),
@@ -37,7 +37,7 @@ const validateUpdate = async (postUserId, userId, dataToUpdate) => {
   const { error } = schema.validate(dataToUpdate);
   if (error) throw new ApplicationError(err.MISSING_FIELD, 400);
   
-  return validateUserAuthorazation(postUserId, userId);
+  return validateUserAuthorazation(postUserId, dataToUpdate.userId);
 };
 
 const validateRequestToCreatePost = (newPost) => {
@@ -104,7 +104,7 @@ const findPostByInfos = async (newPost) =>
   } });
 
 const postService = {
-  create: async (token, newPost) => {
+  create: async (newPost) => {
     await authenticate(newPost);
     await createPost(newPost);
     const postCreated = await findPostByInfos(newPost);
@@ -124,8 +124,8 @@ const postService = {
     return formatPost(post);
   },
 
-  update: async (postId, userId, dataToUpdate) => {
-    const post = await validateUpdate(postId, userId, dataToUpdate);
+  update: async (postId, dataToUpdate) => {
+    const post = await validateUpdate(postId, dataToUpdate);
     await updatePost(post, dataToUpdate);
   
     return postService.getById(postId);

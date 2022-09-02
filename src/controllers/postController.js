@@ -4,10 +4,8 @@ const postCategoryService = require('../services/postCategoryService');
 
 const postController = {
   create: async (request, response) => {
-    const token = request.headers.authorization;
     const newPost = request.body;
-    console.log(newPost)
-    const postCreated = await postService.create(token, newPost);
+    const postCreated = await postService.create(newPost);
     await postCategoryService.create(postCreated, newPost);
   
     response.status(201).json(postCreated);
@@ -27,20 +25,15 @@ const postController = {
   update: async (request, response) => {
     const { id } = request.params;
     const dataToUpdate = request.body;
-    const token = request.headers.authorization;
-
-    const userId = await userService.extractUserIdFromAccessToken(token);
-    const post = await postService.update(Number(id), Number(userId), dataToUpdate);
+    const post = await postService.update(Number(id), dataToUpdate);
 
     response.status(200).json(post);
   },
 
   delete: async (request, response) => {
     const { id } = request.params;
-    const token = request.headers.authorization;
-
-    const userId = await userService.extractUserIdFromAccessToken(token);
-    await postService.delete(Number(id), Number(userId));
+    const { userId } = request.body
+    await postService.delete(Number(id), userId);
     response.status(204).send();
   },
 
