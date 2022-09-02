@@ -6,7 +6,6 @@ const err = require('../constants/errorMessage');
 const validate = async (body) => {
   const schema = Joi.object({
     name: Joi.string().required(),
-    userId: Joi.number().required(),
   });
   const { error } = schema.validate(body);
 

@@ -27,7 +27,7 @@ const validateUserAuthorazation = async (postId, userId) => {
   return post;
 };
 
-const validateUpdate = async (postUserId, dataToUpdate) => {
+const validateUpdate = async (dataToUpdate) => {
   const schema = Joi.object({
     title: Joi.string().required(),
     content: Joi.string().required(),
@@ -35,8 +35,6 @@ const validateUpdate = async (postUserId, dataToUpdate) => {
 
   const { error } = schema.validate(dataToUpdate);
   if (error) throw new ApplicationError(err.MISSING_FIELD, 400);
-  
-  return validateUserAuthorazation(postUserId, dataToUpdate.userId);
 };
 
 const validateRequestBody = (newPost) => {
@@ -44,7 +42,6 @@ const validateRequestBody = (newPost) => {
     title: Joi.string().required(),
     content: Joi.string().required(),
     categoryIds: Joi.array().required(),
-    userId: Joi.number().required(),
    });
    const { error } = schema.validate(newPost);
   
@@ -91,23 +88,16 @@ const findPostById = async (postId) =>
     { model: Category, through: { attributes: [] } },
   ] });
 
-const createPost = async ({ title, content, userId }) => 
+const createPost = async ({ title, content }, userId) => 
   BlogPost.create({ 
     title, content, userId, published: new Date(), updated: new Date(),
   });
 
-const findPostByInfos = async (newPost) => 
-  BlogPost.findOne({ where: { 
-    title: newPost.title, 
-    userId: newPost.userId,
-  } });
-
 const postService = {
-  create: async (newPost) => {
+  create: async (newPost, userId) => {
     await authenticate(newPost);
-    await createPost(newPost);
-    const postCreated = await findPostByInfos(newPost);
-    return postCreated.dataValues;
+    const post =await createPost(newPost, userId);
+    return {...post.dataValues, id: post.null};
   },
 
   getAll: async () => {
@@ -123,9 +113,10 @@ const postService = {
     return formatPost(post);
   },
 
-  update: async (postId, dataToUpdate) => {
-    const post = await validateUpdate(postId, dataToUpdate);
-    await updatePost(post, dataToUpdate);
+  update: async (postId, dataToUpdate, userId) => {
+    await validateUpdate(dataToUpdate);
+    const post = await validateUserAuthorazation(postId, userId);
+    await updatePost(post, dataToUpdate, userId);
   
     return postService.getById(postId);
   },
@@ -141,7 +132,6 @@ const postService = {
 
   search: async (searchTerm) => {
     if (!searchTerm) return postService.getAll();
-    
     const posts = await searchPostByTerm(searchTerm);
     return posts.map(({ dataValues }) => dataValues)
       .map((post) => formatPost(post));

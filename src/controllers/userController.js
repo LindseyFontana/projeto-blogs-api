@@ -1,4 +1,5 @@
 const userService = require('../services/userService');
+var httpContext = require('express-http-context');
 
 const usersController = {
   create: async (request, response) => {
@@ -20,7 +21,7 @@ const usersController = {
 
   delete: async (request, response) => {
     const idToDelete = request.params.id;
-    const { userId } = request.body;
+    var { userId } = httpContext.get('authenticateUser')
     await userService.delete(userId, Number(idToDelete));
     response.status(204).send();
   },
