@@ -3,6 +3,7 @@ const ApplicationError = require('../error/error');
 const { User } = require('../database/models');
 const err = require('../constants/errorMessage');
 const tokenManager = require('../security/tokenManager');
+const passwordCrypto = require('../security/passwordCrypto');
 
 const validateRequestBody = async (newUser) => {
   const schema = Joi.object({
@@ -26,7 +27,8 @@ const userService = {
   create: async (newUser) => {
     await validateRequestBody(newUser);
     await verifyIfExists(newUser.email);
-    const user = await User.create(newUser);
+    const password = passwordCrypto.encryptPassword(newUser.password)
+    const user = await User.create({...newUser, password});
     const idUser = user.null;
     const emailUser = user.dataValues.email;
     return tokenManager.create({idUser, emailUser });
@@ -45,7 +47,7 @@ const userService = {
 
   getUser: async (body) => {
     const { email, password } = body
-    const user = await User.findOne({ where: { email, password }, attributes: { exclude: 'password' } });
+    const user = await User.findOne({ where: { email }, attributes: { exclude: 'password' } });
     return user.dataValues;
   },
   
