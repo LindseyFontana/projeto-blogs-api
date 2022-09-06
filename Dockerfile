@@ -1,4 +1,11 @@
-FROM node:16
+FROM node:16.14-alpine
 
-RUN apt-get update
-RUN apt-get install lsof
+COPY package* ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3001
+
+CMD ["npm", "start"]
