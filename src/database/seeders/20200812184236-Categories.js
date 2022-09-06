@@ -4,11 +4,19 @@ module.exports = {
       [
         {
           id: 1,
-          name: 'Inovação',
+          name: 'Família',
         },
         {
           id: 2,
+          name: 'Trabalho',
+        },
+        {
+          id: 3,
           name: 'Escola',
+        },
+        {
+          id: 4,
+          name: 'Música',
         },
       ], { timestamps: false });
   },
