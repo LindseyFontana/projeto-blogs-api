@@ -29,11 +29,11 @@ Projeto Node.js desenvolvido por [Lindsey Oliva Fontana](https://www.linkedin.co
  Instale o Insomnia: [link](https://insomnia.rest/download)
  <br />
  
-- Baixe [esta collection](/Insomnia/Insomnia_2022-09-08.json) **e importe no seu Insomnia**.
-- Selecione a collection `Sandbox` e o environment `XYZ`.
+- Baixe [esta collection](/Insomnia/Insomnia_2022-09-08.json) **e importe no seu Insomnia** [Documentação Insomnia](https://docs.insomnia.rest/insomnia/import-export-data).
+- Selecione a collection `local`.
 ![Imagem da tela de seleção da collection no Insomnia!](/Insomnia/configurar-insomnia.png) 
 
-- Entre em `Manage Environments` e edite o environment `local`. Será necessário criar um usuário fictício, para isso altere os seguintes valores: 
+- Entre em `Manage Environments` e edite o environment `local`. Será necessário criar um usuário fictício, para isso insira os seguintes valores: 
   * user_name (mínimo 8 caracteres)
   * user_email (user@mail.com)
   * user_password
