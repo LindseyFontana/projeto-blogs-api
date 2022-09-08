@@ -13,7 +13,7 @@ Projeto Node.js desenvolvido por Lindsey Oliva Fontana durante o módulo de Back
 * Express async errors - Captura erros;
 * Express-http-context - Altera o escopo da `request`;
 * Sequelize
-* Joi - Realiza validações
+* Joi - Realiza validações na `request`;
 * MySQL2 - Conecta a aplicação ao banco de dados MySQL;
 * Dotenv - Acessa variáveis de ambiente;
 * Json Web Token - Cria token;
