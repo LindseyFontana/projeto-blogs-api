@@ -8,7 +8,7 @@ Projeto Node.js desenvolvido por Lindsey Oliva Fontana durante o módulo de Back
 
 ## 🛠 Ferramentas
 * JavaScript ES6+
-* Node
+* Node.js
 * Express
 * Express async errors
 * Sequelize
