@@ -29,19 +29,21 @@ Projeto Node.js desenvolvido por [Lindsey Oliva Fontana](https://www.linkedin.co
  Instale o Insomnia: [link](https://insomnia.rest/download)
  <br />
  
-- Baixe [esta collection](/Insomnia/Insomnia_2022-09-08.json) **e importe no seu Insomnia** [Documentação Insomnia](https://docs.insomnia.rest/insomnia/import-export-data).
+- Baixe [esta collection](/Insomnia/Insomnia_2022-09-08.json) **e importe no seu Insomnia**. [Como importar?](https://docs.insomnia.rest/insomnia/import-export-data).
 - Selecione a collection `local`.
 ![Imagem da tela de seleção da collection no Insomnia!](/Insomnia/configurar-insomnia.png) 
 
 - Entre em `Manage Environments` e edite o environment `local`. Será necessário criar um usuário fictício, para isso insira os seguintes valores: 
+
   * user_name (mínimo 8 caracteres)
   * user_email (user@mail.com)
-  * user_password
+  * user_password (mínimo 6 caracteres)
   * user_image (url da imagem)
   * search_tem (termo usado para pesquisar posts através do title e content)
 
- ![Imagem da tela de configuração do ambiente da collection no Insomnia!](/Insomnia/configurar-insomnia2.png) 
-- Agora é só executar as requisições de exemplo! Após criar seu usuário e executar o primeiro login, não é necessário executar manualmente a requisição de geração de token (`\login`) antes de cada requisição!
+![Imagem da tela de configuração do ambiente da collection no Insomnia!](/Insomnia/configurar-insomnia2.png) 
+ 
+- Agora é só executar as requisições de exemplo! Inicie pela criação do seu usuário(`\user`), após execute o login (`\login`). O token gerado será inserido automaticamente no header das demais requisições!
  
 <br />
 </details>
