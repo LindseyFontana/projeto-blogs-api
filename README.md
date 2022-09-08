@@ -10,7 +10,8 @@ Projeto Node.js desenvolvido por Lindsey Oliva Fontana durante o módulo de Back
 * JavaScript ES6+
 * Node.js
 * Express
-* Express async errors
+* Express async errors - Captura erros;
+* Express-http-context - Altera o escopo da `request`;
 * Sequelize
 * Joi - Realiza validações
 * MySQL2 - Conecta a aplicação ao banco de dados MySQL;
