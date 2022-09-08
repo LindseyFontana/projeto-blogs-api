@@ -20,25 +20,32 @@ Projeto Node.js desenvolvido por Lindsey Oliva Fontana durante o módulo de Back
 
 ## ⚠️ Orientações
 <details>
+<summary><strong>Configurar ambiente</strong></summary>
+
+* Instale o MySQL,
+* Instale o Insomnia
+ 
+<br />
+</details>
+
+<details>
 <summary><strong>Instalar dependências</strong></summary>
 
-* npm install
+* `npm install`
  
 <br />
 </details>
 
 <details>
 <summary><strong> Banco de dados </strong></summary>
- <br />
-<strong>Executar os comandos no terminal: </strong>
+ <br /> 
+Criar e popular o banco de dados
 <br />
-  
-Para criar o banco de dados
-  * npx sequelize-cli db:create
-  * npx sequelize-cli sequelize-cli db:migrate
 
-Para popular o banco de dados
- * npx sequelize-cli db:seed:all
+  * `npx sequelize-cli db:create`
+  * `npx sequelize-cli sequelize-cli db:migrate`
+  * `npx sequelize-cli db:seed:all`
+
 <br />
 </details>
 
@@ -46,6 +53,6 @@ Para popular o banco de dados
  <br />
  <summary><strong> Executar</strong></summary>
 
-  * npm start
+  * `npm start`
 
 </details>
