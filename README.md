@@ -29,15 +29,18 @@ Projeto Node.js desenvolvido por [Lindsey Oliva Fontana](https://www.linkedin.co
  Instale o Insomnia: [link](https://insomnia.rest/download)
  <br />
  
-- Baixe [esta collection](/path/da/collection) **e importe no seu Insomnia**.
+- Baixe [esta collection](/Insomnia/Insomnia_2022-09-08.json) **e importe no seu Insomnia**.
 - Selecione a collection `Sandbox` e o environment `XYZ`.
+![Imagem da tela de seleção da collection no Insomnia!](/Insomnia/configurar-insomnia.png) 
+
 - Entre em `Manage Environments` e edite o environment `local`. Será necessário criar um usuário fictício, para isso altere os seguintes valores: 
- 
   * user_name (mínimo 8 caracteres)
   * user_email (user@mail.com)
   * user_password
   * user_image (url da imagem)
   * search_tem (termo usado para pesquisar posts através do title e content)
+
+ ![Imagem da tela de configuração do ambiente da collection no Insomnia!](/Insomnia/configurar-insomnia2.png) 
 - Agora é só executar as requisições de exemplo! Após criar seu usuário e executar o primeiro login, não é necessário executar manualmente a requisição de geração de token (`\login`) antes de cada requisição!
  
 <br />
