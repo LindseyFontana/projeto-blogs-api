@@ -39,7 +39,7 @@ Projeto Node.js desenvolvido por [Lindsey Oliva Fontana](https://www.linkedin.co
   * user_email (user@mail.com)
   * user_password (mínimo 6 caracteres)
   * user_image (url da imagem)
-  * search_tem (termo usado para pesquisar posts através do title e content)
+  * search_tem (termo usado para pesquisar posts através do `title` e `content`)
 
 ![Imagem da tela de configuração do ambiente da collection no Insomnia!](/Insomnia/configurar-insomnia2.png) 
  
