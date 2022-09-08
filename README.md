@@ -2,7 +2,7 @@
 Este projeto consiste em uma aplicação Node que cria uma API e um banco de dados via ORM (Sequelize). A API simula um Blog, expõe endpoints para fazer CRUD de posts e usuários.
 <br />
 
-Projeto Node.js desenvolvido por Lindsey Oliva Fontana durante o módulo de Back-End do curso de desenvolvimento web da escola Trybe 🚀
+Projeto Node.js desenvolvido por [Lindsey Oliva Fontana](https://www.linkedin.com/in/lindsey-fontana-schmitz/) durante o módulo de Back-End do curso de desenvolvimento web da escola Trybe 🚀
 
 <br />
 
@@ -24,8 +24,21 @@ Projeto Node.js desenvolvido por Lindsey Oliva Fontana durante o módulo de Back
 <details>
 <summary><strong>Configurar ambiente</strong></summary>
 
-* Instale o MySQL,
-* Instale o Insomnia
+ Instale o MySQL,
+
+ Instale o Insomnia: [link](https://insomnia.rest/download)
+ <br />
+ 
+- Baixe [esta collection](/path/da/collection) **e importe no seu Insomnia**.
+- Selecione a collection `Sandbox` e o environment `XYZ`.
+- Entre em `Manage Environments` e edite o environment `local`. Será necessário criar um usuário fictício, para isso altere os seguintes valores: 
+ 
+  * user_name (mínimo 8 caracteres)
+  * user_email (user@mail.com)
+  * user_password
+  * user_image (url da imagem)
+  * search_tem (termo usado para pesquisar posts através do title e content)
+- Agora é só executar as requisições de exemplo! Após criar seu usuário e executar o primeiro login, não é necessário executar manualmente a requisição de geração de token (`\login`) antes de cada requisição!
  
 <br />
 </details>
